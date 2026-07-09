@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quiz Game</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #2d3436;
+        }
+        .game-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 { margin-top: 0; color: #6c5ce7; }
+        .score-board { font-size: 1.1rem; margin-bottom: 20px; font-weight: bold; }
+        .question { font-size: 2.5rem; margin: 20px 0; font-weight: bold; color: #2d3436; }
+        input[type="number"] {
+            font-size: 1.5rem;
+            width: 120px;
+            padding: 10px;
+            text-align: center;
+            border: 2px solid #b2bec3;
+            border-radius: 8px;
+            outline: none;
+            margin-bottom: 20px;
+        }
+        input[type="number"]:focus { border-color: #6c5ce7; }
+        button {
+            background-color: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+        button:hover { background-color: #5b4cc4; }
+        .feedback { font-size: 1.2rem; font-weight: bold; margin-top: 15px; min-height: 24px; }
+        .correct { color: #00b894; }
+        .wrong { color: #d63031; }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <h1>King of Sifir</h1>
+    <div class="score-board">Score: <span id="score">0</span></div>
+    <div class="question" id="question">Loading...</div>
+    
+    <form id="gameForm" autocomplete="off">
+        <input type="number" id="answer" placeholder="?" required autofocus>
+        <button type="submit">Submit Answer</button>
+    </form>
+    
+    <div class="feedback" id="feedback"></div>
+</div>
+
+<script>
+    let score = 0;
+    let num1 = 0;
+    let num2 = 0;
+    let correctAnswer = 0;
+
+    const questionElement = document.getElementById('question');
+    const answerInput = document.getElementById('answer');
+    const scoreElement = document.getElementById('score');
+    const feedbackElement = document.getElementById('feedback');
+    const form = document.getElementById('gameForm');
+
+    function generateQuestion() {
+        // Generates random multiplication numbers from 1 to 12
+        num1 = Math.floor(Math.random() * 12) + 1;
+        num2 = Math.floor(Math.random() * 12) + 1;
+        correctAnswer = num1 * num2;
+        
+        questionElement.textContent = `${num1} × ${num2}`;
+        answerInput.value = '';
+        answerInput.focus();
+    }
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevents page reload
+        
+        const userAnswer = parseInt(answerInput.value, 10);
+        
+        if (userAnswer === correctAnswer) {
+            score++;
+            scoreElement.textContent = score;
+            feedbackElement.textContent = "Correct! 🎉";
+            feedbackElement.className = "feedback correct";
+        } else {
+            feedbackElement.textContent = `Oops! Correct answer was ${correctAnswer}.`;
+            feedbackElement.className = "feedback wrong";
+        }
+        
+        // Load the next question after a brief delay
+        setTimeout(generateQuestion, 1200);
+    });
+
+    // Start the game loop on load
+    generateQuestion();
+</script>
+
+</body>
+</html>
